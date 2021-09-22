@@ -34,15 +34,16 @@ const ImgPicker = (props) => {
 
     const image = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      aspect: [16, 9],
+      aspect: [9, 9],
       quality: 0.5,
     });
 
     setPickedImage(image.uri);
+    props.onImageSelect(image.uri);
   };
 
   return (
-    <View style={styles.imagePicker}>
+    <View style={[styles.imagePicker, props.style]}>
       <View style={styles.imagePreview}>
         {!pickedImage ? (
           <Text>No image picked yet.</Text>
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   imagePreview: {
     width: "100%",
     height: 200,
-    marginBottom: 8,
+    marginBottom: 2,
     justifyContent: "center",
     alignItems: "center",
     borderColor: "#ccc",
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   btn: {
-    width: "50%",
+    width: "100%",
   },
 });
 

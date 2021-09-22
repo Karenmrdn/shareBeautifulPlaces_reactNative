@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     marginBottom: 5,
+    fontWeight: "bold",
   },
   address: {
     color: "#666",

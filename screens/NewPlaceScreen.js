@@ -9,13 +9,13 @@ import ImagePicker from "../components/ImagePicker";
 const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
   const [titleValue, setTitleValue] = useState("");
+  const [selectedImageUri, setSelectedImageUri] = useState();
 
   const handlePlaceSave = () => {
     if (titleValue.trim().length === 0) {
       return;
-    }
-
-    dispatch(addPlace(titleValue));
+    } 
+    dispatch(addPlace(titleValue, selectedImageUri));
     props.navigation.goBack();
   };
 
@@ -28,12 +28,16 @@ const NewPlaceScreen = (props) => {
           value={titleValue}
           onChangeText={setTitleValue}
         />
-        <ImagePicker />
+        <ImagePicker
+          onImageSelect={setSelectedImageUri}
+          style={styles.imagePicker}
+        />
         <CustomButton
           title="Save Place"
           color={colors.secondary}
           style={styles.btn}
           onPress={handlePlaceSave}
+          disabled={!titleValue || !selectedImageUri}
         />
       </View>
     </ScrollView>
@@ -52,14 +56,17 @@ const styles = StyleSheet.create({
   label: {
     textAlign: "center",
     fontWeight: "bold",
+    marginBottom: 4,
   },
   input: {
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
-    marginVertical: 8,
     padding: 6,
     width: "100%",
+  },
+  imagePicker: {
+    marginVertical: 16,
   },
   btn: {
     width: "50%",
