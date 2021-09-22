@@ -5,6 +5,7 @@ import colors from "../constants/colors";
 import { useDispatch } from "react-redux";
 import { addPlace } from "../store/placesActions";
 import ImagePicker from "../components/ImagePicker";
+import LocationPicker from "../components/LocationPicker";
 
 const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ const NewPlaceScreen = (props) => {
   const handlePlaceSave = () => {
     if (titleValue.trim().length === 0) {
       return;
-    } 
+    }
     dispatch(addPlace(titleValue, selectedImageUri));
     props.navigation.goBack();
   };
@@ -32,9 +33,10 @@ const NewPlaceScreen = (props) => {
           onImageSelect={setSelectedImageUri}
           style={styles.imagePicker}
         />
+        <LocationPicker navigation={props.navigation} />
         <CustomButton
           title="Save Place"
-          color={colors.secondary}
+          color={colors.primary}
           style={styles.btn}
           onPress={handlePlaceSave}
           disabled={!titleValue || !selectedImageUri}
@@ -69,6 +71,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   btn: {
+    marginTop: 16,
     width: "50%",
   },
 });

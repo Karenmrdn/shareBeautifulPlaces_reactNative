@@ -4,30 +4,16 @@ import colors from "../constants/colors";
 import CustomButton from "./CustomButton";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import verifyPermissionsAsync from "../helpers/verifyPermissionsAsync";
 
 const ImgPicker = (props) => {
   const [pickedImage, setPickedImage] = useState();
 
-  const verifyPermissions = async () => {
-    const result = await Permissions.askAsync(
-      Permissions.CAMERA,
-      Permissions.CAMERA_ROLL
-    );
-
-    if (result.status !== "granted") {
-      Alert.alert(
-        "Permissions denied!",
-        "You need to grant camera permissions to use this app.",
-        [{ text: "OK" }]
-      );
-      return false;
-    }
-
-    return true;
-  };
-
   const handleImageTake = async () => {
-    const hasPermissions = await verifyPermissions();
+    const hasPermissions = await verifyPermissionsAsync(
+      [Permissions.CAMERA, Permissions.CAMERA_ROLL],
+      "You need to grant camera permissions to use this app."
+    );
     if (!hasPermissions) {
       return;
     }
@@ -46,14 +32,14 @@ const ImgPicker = (props) => {
     <View style={[styles.imagePicker, props.style]}>
       <View style={styles.imagePreview}>
         {!pickedImage ? (
-          <Text>No image picked yet.</Text>
+          <Text>No image picked yet</Text>
         ) : (
           <Image source={{ uri: pickedImage }} style={styles.image} />
         )}
       </View>
       <CustomButton
-        title="Take image"
-        color={colors.primary}
+        title="Take Image"
+        color={colors.secondary}
         onPress={handleImageTake}
         style={styles.btn}
       />
