@@ -38,7 +38,7 @@ const ImgPicker = (props) => {
         )}
       </View>
       <CustomButton
-        title="Take Image"
+        title="Take an Image"
         color={colors.secondary}
         onPress={handleImageTake}
         style={styles.btn}

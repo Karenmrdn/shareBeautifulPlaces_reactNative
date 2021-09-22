@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, ActivityIndicator, Alert, StyleSheet } from "react-native";
 import colors from "../constants/colors";
 import CustomButton from "./CustomButton";
@@ -10,6 +10,14 @@ import MapPreview from "./MapPreview";
 const LocationPicker = (props) => {
   const [pickedLocation, setPickedLocation] = useState();
   const [isFetching, setIsFetching] = useState(false);
+
+  const mapPickedLocation = props.navigation.getParam("pickedLocation");
+
+  useEffect(() => {
+    if (mapPickedLocation) {
+      setPickedLocation(mapPickedLocation);
+    }
+  }, [mapPickedLocation]);
 
   const handleLocationShare = async () => {
     const hasPermissions = await verifyPermissionsAsync(
@@ -30,6 +38,8 @@ const LocationPicker = (props) => {
         lat: location.coords.latitude,
         lng: location.coords.longitude,
       });
+
+      
     } catch (error) {
       Alert.alert(
         "Could not fetch location!",
