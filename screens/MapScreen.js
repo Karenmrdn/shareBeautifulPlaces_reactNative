@@ -13,7 +13,9 @@ import colors from "../constants/colors";
 const isAndroid = Platform.OS === "android";
 
 const MapScreen = (props) => {
-  const [selectedCoords, setSelectedCoords] = useState();
+  const readonly = props.navigation.getParam("readonly");
+  const initialLocation = props.navigation.getParam("initialLocation");
+  const [selectedCoords, setSelectedCoords] = useState(initialLocation);
 
   const handlePickedLocationSave = useCallback(() => {
     if (!selectedCoords) {
@@ -28,8 +30,8 @@ const MapScreen = (props) => {
   }, [handlePickedLocationSave]);
 
   const region = {
-    latitude: 37.775,
-    longitude: -122.44,
+    latitude: selectedCoords?.lat ?? 37.775,
+    longitude: selectedCoords?.lng ?? -122.44,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
@@ -43,6 +45,9 @@ const MapScreen = (props) => {
   }
 
   const handleLocationSelect = (event) => {
+    if (readonly) {
+      return;
+    }
     setSelectedCoords({
       lat: event.nativeEvent.coordinate.latitude,
       lng: event.nativeEvent.coordinate.longitude,
@@ -59,6 +64,8 @@ const MapScreen = (props) => {
 };
 
 MapScreen.navigationOptions = (navData) => {
+  const readonly = navData.navigation.getParam("readonly");
+
   let TouchableComponent = TouchableOpacity;
   if (isAndroid && Platform.Version >= 21) {
     TouchableComponent = TouchableNativeFeedback;
@@ -66,6 +73,9 @@ MapScreen.navigationOptions = (navData) => {
 
   const saveLocation = navData.navigation.getParam("saveLocation");
 
+  if (readonly) {
+    return {};
+  }
   return {
     headerRight: () => (
       <View style={styles.headerRightBlock}>
