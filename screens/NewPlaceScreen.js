@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { StyleSheet, ScrollView, TextInput, Text, View } from "react-native";
 import CustomButton from "../components/CustomButton";
 import colors from "../constants/colors";
@@ -11,14 +11,19 @@ const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
   const [titleValue, setTitleValue] = useState("");
   const [selectedImageUri, setSelectedImageUri] = useState();
+  const [selectedLocation, setSelectedLocation] = useState();
 
   const handlePlaceSave = () => {
     if (titleValue.trim().length === 0) {
       return;
     }
-    dispatch(addPlace(titleValue, selectedImageUri));
+    dispatch(addPlace(titleValue, selectedImageUri, selectedLocation));
     props.navigation.goBack();
   };
+
+  const locationPickHandler = useCallback((location) => {
+    setSelectedLocation(location);
+  }, []);
 
   return (
     <ScrollView>
@@ -33,7 +38,10 @@ const NewPlaceScreen = (props) => {
           onImageSelect={setSelectedImageUri}
           style={styles.imagePicker}
         />
-        <LocationPicker navigation={props.navigation} />
+        <LocationPicker
+          onLocationPick={locationPickHandler}
+          navigation={props.navigation}
+        />
         <CustomButton
           title="Save Place"
           color={colors.primary}

@@ -1,19 +1,20 @@
 import React from "react";
-import PlacesNavigator from "./navigation/PlacesNavigator";
-import { applyMiddleware, createStore, combineReducers } from "redux";
+import { Alert } from "react-native";
 import { Provider } from "react-redux";
+import { applyMiddleware, combineReducers, createStore } from "redux";
 import ReduxThunk from "redux-thunk";
-import placesReducer from "./store/placesReducer";
 import { init } from "./helpers/db";
+import PlacesNavigator from "./navigation/PlacesNavigator";
+import placesReducer from "./store/placesReducer";
 
-init()
-  .then(() => {
-    console.log("Initializing database");
-  })
-  .catch((error) => {
-    console.log("Initializing database failed");
-    console.log(error);
-  });
+init().catch((error) => {
+  Alert.alert(
+    "Database error!",
+    "Error occurred while initializing database.",
+    [{ text: "OK" }]
+  );
+  console.error(error.message);
+});
 
 const rootReducer = combineReducers({
   places: placesReducer,
